@@ -2,6 +2,9 @@ const promptTitle = document.getElementById('prompt-title')
 const promptContent = document.getElementById('prompt-content')
 const titleWrapper = document.getElementById('title-wrapper')
 const contentWrapper = document.getElementById('content-wrapper')
+const btnOpen = document.getElementById('btn-open')
+const btnCollapse = document.getElementById('btn-collapse')
+const sidebar = document.querySelector('.sidebar')
 
 
 function updateEditableWrapperState(element, wrapper) {
@@ -24,9 +27,26 @@ function attachAllEditableHandlers() {
     })
 }
 
+
+function openSidebar() {
+    btnOpen.addEventListener('click', () => {
+    sidebar.style.display = 'flex'
+    btnOpen.style.display = 'none'
+})
+}
+
+function closeSidebar() {
+    btnCollapse.addEventListener('click', () => {
+    sidebar.style.display = 'none'
+    btnOpen.style.display = 'block'
+})
+}
+
 function init() {
     attachAllEditableHandlers()
     updateAllEditableStates()
+    openSidebar()
+    closeSidebar()
 }
 
 init()
