@@ -13,6 +13,8 @@ const btnOpen = document.getElementById('btn-open')
 const btnCollapse = document.getElementById('btn-collapse')
 const sidebar = document.querySelector('.sidebar')
 const btnSave = document.getElementById('btn-save')
+const list = document.getElementById('prompt-list')
+const search = document.getElementById('search-input')
 
 
 function updateEditableWrapperState(element, wrapper) {
@@ -85,6 +87,27 @@ function load() {
     }
 }
 
+function createPromptItem(prompt) {
+    return `
+        <li class="prompt-item">
+            <div class="prompt-item-content">
+                <span class="prompt-item-title">${prompt.title}</span>
+                <span class="prompt-item-description">${prompt.content}</span>
+            </div>
+            <button class="btn-icon" aria-label="Remover">
+                <img src="./assets/remove.svg" class="icon icon-trash" alt="Ícone de remover">
+            </button>
+        </li>
+    `
+}
+
+function renderList(filterText = "") {
+    const filteredPrompts = state.prompts.filter((prompt) => prompt.title.toLowerCase().includes(filterText.toLowerCase().trim())
+  ).map((p) => createPromptItem(p)).join("")
+
+  list.innerHTML = filteredPrompts
+}
+
 function persist() {
     try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state.prompts))
@@ -95,9 +118,13 @@ function persist() {
 }
 
 btnSave.addEventListener('click', save)
+search.addEventListener('input', function (event) {
+    renderList(event.target.value)
+})
 
 function init() {
     load()
+    renderList("")
     attachAllEditableHandlers()
     updateAllEditableStates()
     openSidebar()
