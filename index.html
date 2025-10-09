@@ -28,7 +28,27 @@
                     <input type="text" class="search-input" id="search-input" placeholder="Buscar por título">
                     <button class="btn-primary btn btn-full" id="btn-new">Novo prompt</button>
                 </div>
+                <ul class="prompt-list" id="prompt-list">
+                    <li class="prompt-item">
+                        <div class="prompt-item-content">
+                            <span class="prompt-item-title">Título do Prompt</span>
+                            <span class="prompt-item-description">Descrição breve do prompt exibida.</span>
+                        </div>
+                        <button class="btn-icon" aria-label="Remover">
+                            <img src="./assets/remove.svg" class="icon icon-trash" alt="Ícone de remover">
+                        </button>
+                    </li>
 
+                    <li class="prompt-item">
+                        <div class="prompt-item-content">
+                            <span class="prompt-item-title">Título do Prompt</span>
+                            <span class="prompt-item-description">Descrição breve do prompt exibida.</span>
+                        </div>
+                        <button class="btn-icon" aria-label="Remover">
+                            <img src="./assets/remove.svg" class="icon icon-trash" alt="Ícone de remover">
+                        </button>
+                    </li>
+                </ul>
             </div>
         </aside>
         <main class="main">
@@ -39,24 +59,19 @@
                         Copiar
                     </span>
                 </button>
-                <button class="btn-primary btn w-150">
+                <button class="btn-primary btn w-150" id="btn-save">
                     Salvar
                 </button>
             </header>
 
             <div data-placeholder="Título do prompt" class="editable-wrapper" id="title-wrapper">
-                <h1 id="prompt-title" class="prompt-title" contenteditable="true">⚡ Planejamento de tarefas semanais
+                <h1 id="prompt-title" class="prompt-title" contenteditable="true">
                 </h1>
             </div>
 
             <div data-placeholder="Conteúdo do prompt..." class="editable-wrapper" id="content-wrapper">
                 <div id="prompt-content" class="prompt-content" contenteditable="true">
-                    Me ajude a organizar minha semana de forma
-                    equilibrada.<br />
-                    Distribua minhas tarefas profissionais e pessoais em blocos de tempo realistas.<br />
-                    Sugira horários para foco profundo e momentos para pausas estratégicas.<br />
-                    Inclua dicas de priorização. No final, entregue o plano em formato de checklist diário para fácil
-                    acompanhamento.</div>
+                </div>
             </div>
         </main>
     </div>
