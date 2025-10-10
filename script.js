@@ -15,6 +15,8 @@ const sidebar = document.querySelector('.sidebar')
 const btnSave = document.getElementById('btn-save')
 const list = document.getElementById('prompt-list')
 const search = document.getElementById('search-input')
+const btnNew = document.getElementById('btn-new')
+const btnCopy = document.getElementById('btn-copy')
 
 
 function updateEditableWrapperState(element, wrapper) {
@@ -63,6 +65,12 @@ function save() {
     }
 
     if (state.selectedId) {
+        const existingPrompt = state.prompts.find((p) => p.id === state.selectedId)
+
+        if (existingPrompt) {
+            existingPrompt.title = title || "Sem título"
+            existingPrompt.content = content || "Sem conteúdo"
+        }
         
     } else {
         const newPrompt = {
@@ -74,7 +82,9 @@ function save() {
         state.selectedId = newPrompt.id
     }
 
+    renderList(search.value)
     persist()
+    alert('Prompt salvo com sucesso!')
 }
 
 function load() {
@@ -88,13 +98,15 @@ function load() {
 }
 
 function createPromptItem(prompt) {
+    const tmp = document.createElement('div')
+    tmp.innerHTML = prompt.content
     return `
-        <li class="prompt-item">
+        <li class="prompt-item" data-id="${prompt.id}" data-action="select">
             <div class="prompt-item-content">
                 <span class="prompt-item-title">${prompt.title}</span>
-                <span class="prompt-item-description">${prompt.content}</span>
+                <span class="prompt-item-description">${tmp.textContent}</span>
             </div>
-            <button class="btn-icon" aria-label="Remover">
+            <button class="btn-icon" aria-label="Remover" data-action="remove">
                 <img src="./assets/remove.svg" class="icon icon-trash" alt="Ícone de remover">
             </button>
         </li>
@@ -111,15 +123,68 @@ function renderList(filterText = "") {
 function persist() {
     try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state.prompts))
-        alert('Prompt salvo com sucesso!')
     } catch (error) {
         console.error('Erro ao persistir os dados no localStorage:', error)
     }
 }
 
+function newPrompt() {
+    state.selectedId = null
+    promptTitle.textContent = ''
+    promptContent.textContent = ''
+    updateAllEditableStates()
+    promptTitle.focus()
+}
+
+function copySelected() {
+    try {
+       const content = promptContent
+        
+       if (!navigator.clipboard) {
+         console.log("Este navegador não suporta a função de copiar no clipboard")
+       }
+
+       navigator.clipboard.writeText(content.innerText)
+        alert('Conteúdo copiado')
+    } catch (error) {
+        console.log('Erro ao copiar o prompt:', error)
+    }
+}
+
+// Eventos
 btnSave.addEventListener('click', save)
+btnNew.addEventListener('click', newPrompt)
+btnCopy.addEventListener('click', copySelected)
 search.addEventListener('input', function (event) {
     renderList(event.target.value)
+})
+list.addEventListener('click', (event) => {
+    const removeBtn = event.target.closest('[data-action="remove"]')
+    const item = event.target.closest('[data-id]')
+
+    if (!item) {
+        return
+    }
+
+    const id = item.getAttribute('data-id')
+    state.selectedId = id
+    
+    if (removeBtn) {
+        state.prompts = state.prompts.filter((p) => p.id !== id)
+        renderList(search.value)
+        persist()
+        return
+    }
+
+    if (event.target.closest('[data-action="select"]')) {
+        const prompt = state.prompts.find((p) => p.id === id)
+
+        if(prompt) {
+            promptTitle.textContent = prompt.title
+            promptContent.innerHTML = prompt.content
+            updateAllEditableStates()
+        }
+    }
 })
 
 function init() {
