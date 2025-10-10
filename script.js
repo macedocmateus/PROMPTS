@@ -41,17 +41,13 @@ function attachAllEditableHandlers() {
 
 
 function openSidebar() {
-    btnOpen.addEventListener('click', () => {
-    sidebar.style.display = 'flex'
-    btnOpen.style.display = 'none'
-})
+    sidebar.classList.add('open')
+    sidebar.classList.remove('collapsed')
 }
 
 function closeSidebar() {
-    btnCollapse.addEventListener('click', () => {
-    sidebar.style.display = 'none'
-    btnOpen.style.display = 'block'
-})
+    sidebar.classList.remove('open')
+    sidebar.classList.add('collapsed')
 }
 
 function save() {
@@ -195,5 +191,11 @@ function init() {
     openSidebar()
     closeSidebar()
 }
+
+sidebar.classList.remove('open')
+sidebar.classList.remove('collapsed')
+
+btnOpen.addEventListener('click', openSidebar)
+btnCollapse.addEventListener('click', closeSidebar)
 
 init()
